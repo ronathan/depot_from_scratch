@@ -1,28 +1,141 @@
-== README
+== Learning to program w/o scaffolds
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Below are my notes for creating ROR apps without scaffolds
 
-Things you may want to cover:
+Scaffolds
+In a ROR app, we need to generate a lot of things to make it work. In particular, we need to create:
+-  A database table to store data
+-	Rails model that lets our application use that table
+-	Views to make up the user interface
+-	Controllers to orchestrate the application
 
-* Ruby version
+Luckily, Rails has the ability to create scaffolds, which sets up ALL of these things, along with the appropriate connections and links between them. This is very useful because it saves you a lot of time rather than having to do it manually. 
 
-* System dependencies
+To create with a scaffold, follow the syntax:
+rails generate scaffold Product \
+title:string description:text image_url:string price:decimal
 
-* Configuration
+Using this syntax inputs code into your migration. Looking inside db/migrate/…_create_products.rb, it will have the following code.
 
-* Database creation
+class CreateProducts < ActiveRecord::Migration
+  def change
+    create_table :products do |t|
+      t.string :title
+      t.text :description
+      t.string :image_url
+      t.decimal :price, precision: 8, scale: 2
 
-* Database initialization
+      t.timestamps
+    end
+  end
+end
 
-* How to run the test suite
+In other words, entering title:string… puts the different variables you want into the migration that you want written to the database. This will create a table in the database that looks kind of like this:
 
-* Services (job queues, cache servers, search engines, etc.)
+Title	Description	Image_Url	Price	Timestamp
 
-* Deployment instructions
+Creating an Application w/o a Scaffold
 
-* ...
+Sometimes when we are creating applications, it is actually more useful to build without a scaffold. This is because a scaffold sometimes adds a lot of unnecessary things in your application. Furthermore, it links a whole bunch of things together and as you know, it is much more difficult to debug if you look after the fact. 
+
+Consequently, it is useful to know how to build without one sometimes so you can keep track of everything.
+
+Step 1: Generate a new project and enter the folder
+rails new depot
+cd depot
+
+Step 2: Generate a controller
+rails generate controller products
+
+important to use “S” at the end
+In Rails, a model is automatically mapped to a database table that is the PLURAL form of the model’s class
+
+Step 3: Make views and actions for what you need
+Create all the views manually by inserting them in the appropriate folders in your file. You will need to account for the following:
+-	html.erb files in Views
+-	Insert all code in it that is needed
+-	Do not forget the json files for your shopping cart app!
+
+JSON for our purposes:
+In our files here, JSON is used to extract data from our database tables. In this case, we use JSON commands to interact with the SQL database in order to get data like :title, :description, and :image_url.
+
+-	JSON stands for Javascript Object Notation. It is a text-based open standard design for reading data
+-	Scripting language based on Javascript, used to represent simple arrays and data stuctures
+-	It is actually language-INDEPENDENT, having parses available across many programming languages
+
+Step 4: Generate your model
+Rails g model Product title:string description:text…
+rake db:migrate
+
+Step 5: Setup your controller
+Here, you need to setup your controller so that you can get your database information. Thus, you setup commands in your controller to interact with the model, which in turn interacts with the database. 
+
+Remember MVC!
+User request  Controller  Model   Database   Model  Controller  View
+
+For this example, we setup an index, new, edit, create, update, destroy
+
+Step 6: Setup routes
+config/routes.rb
+resources :products
+
+Step 7: You’re done!
+
+Validations
+Sometimes you want your program to prevent data from being stored if it is not valid. Validations in ROR are great way of doing just that! We normally place validations in the Model because it is the gateway between the database and the controller.
+
+For the store app, you can validate if each product has the required parameters before entering into the database by using:
+validates :title, :description, :image_url, :price, presence: true
+
+We also want to validate that the price is never $0.00. This can be done using the ‘numericality’ method
+validates :price, numericality: { greater_than_or_equal_to: 0.01 }
+
+Also want to validate that each title is unique.
+validates :title, uniqueness: true
+
+Lastly, you want to validate that the image is a valid URL.
+validate :image_url, allow_blank: true, format: {
+  with %r{\.(gif|jpg|png)\Z}i,
+  message: ‘must be a URL for GIF, JPG, or PNG image.’
+}
+
+Note that allow_blank is used to avoid multiple errors if the image is left blank
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+Testing
+
+Testing is a very important concept in programming because you want to make sure your program works the way it is intended to. You want to make sure you can account for change, modularity, failure, and efficiency. Also, when you make changes to the program, testing is great because it checks whether or not your changes have done anything.
+
+You should always write tests first before you program. That way when you code, you are only coding just enough to do what you want the program to do. This is called Test Driven Development (TDD).
+
+When you create a new project using rails new <project_name>, rails automatically generates a test infrastructure for everything (particularly, all your controllers and models).
+
+When writing tests, you use variations of assert. Basically, you are asserting something to be true that you expect to come out of your program. If it fails, then it means your program isn’t doing what you intended it to do.
+-	Using skip inside the method
+o	Test fails come one at a time as to not overwhelm the user
+o	Tells you exactly which test line failed
+
+You may also want to write tests that purposely enter in bad user input to make sure that your program can handle it. For example, in the shopping cart app, you can choose to write a test for bad image_urls.
+
+Fixtures
+
+In Rails, fixtures is just an area for sample data for testing.
+From documentation:
+“Fixtures is a fancy word for sample data. Fixtures allow you to populate your testing database with predefined data before your tests run. Fixtures are database independent written in YAML. There is one file per model.”
+
+Also, when entering data into fixtures, it is IMPERATIVE that the formatting be exactly the same. This is because when the database needs to be able to read it. Also, make sure that all the required properties are there because a mismatch with the database columns may cause a hard-to-track-down exception.
+
+Make sure to add fixtures :name_of_yml_file into your model test. This makes sure that the data in the fixture is loaded every time you run the test.
+
+Note that most of the scaffolding that Rails generates doesn’t contain calls to the fixtures method. That’s because the default for tests is to load all fixtures before running the test. Because that default is generally the one you want, there usually isn’t any need to change it. Once again, conventions are used to eliminate the need for unnecessary configuration.
+
+Now the fixture data is being used, what you should actually know is that Rails creates a method for each fixture it loads into a test. Furthermore, the name of the method EXACTLY matches that of the fixture data. You can now use this method to load the fixture data simply by passing its name. 
+
+Ex:
+test "product is not valid without a unique title - i18n" do
+  product = Product.new(title: products(:ruby).title, description: "yyy", price: 1, image_url: "fred.gif")
+  assert product.invalid?
+  assert_equal [I18n.translate('errors.messages.taken')],  product.errors[:title]
+end
+
+Also note that if you do not want to use a hard-coded string, use the above code highlighted.
