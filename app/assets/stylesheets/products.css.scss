@@ -1,0 +1,110 @@
+// Place all the styles related to the Products controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+// Place all the styles related to the Products controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+/* START_HIGHLIGHT */
+@import url(stylesheets/bootstrap.css);
+
+.products {
+
+  .jumbotron {
+    position: relative;
+    padding: 120px 0;
+    text-align: left;
+    background-image: url("cloudheader.jpg");
+    background-position: 0px 45px;
+    border-bottom: 1px solid #000000;
+  }
+
+  .navbar-inverse .navbar-inner {
+    background-color: #1b1b1b;
+    background-image: -moz-linear-gradient(top, #ffffff, #ffffff);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#ffffff));
+    background-image: -webkit-linear-gradient(top, #ffffff, #ffffff);
+    background-image: -o-linear-gradient(top, #ffffff, #ffffff);
+    background-image: linear-gradient(to bottom, #fff, #fff);
+    background-repeat: repeat-x;
+    border-color: #252525;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff222222', endColorstr='#ff111111', GradientType=0);
+  }
+
+  .navbar-inverse .brand:hover,
+  .navbar-inverse .nav > li > a:hover,
+  .navbar-inverse .brand:focus,
+  .navbar-inverse .nav > li > a:focus {
+    color: #5F97EE;
+    background-color: #fff;
+  }
+
+  .navbar-inverse .nav .active > a,
+  .navbar-inverse .nav .active > a:hover,
+  .navbar-inverse .nav .active > a:focus {
+    color: #ffffff;
+    background-color: #5F97EE;
+  }
+
+  .container {
+    width:1170px;
+    margin-top: 10px;
+  }
+
+  .hero-unit {
+    font-family: Monsieur La Doulaise;
+    margin-bottom:10px;
+    border: 1px solid #000000;
+    background-color:#fff;
+  }
+
+  .row {
+    margin-left: -10px;
+    *zoom: 1;
+    width:1180px;
+  }
+
+  .span4 {
+    margin-top:0px;
+    margin-bottom: 10px;
+    margin-left:11px;
+    padding:10px;
+    padding-top:40px;
+    height:430px;
+    width:360px;
+    border: 1px solid #000000;
+    background-image: url('cloudbackground.jpg');
+    background-position:-200px -100px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    font-family: Monsieur La Doulaise;
+    opacity: 0.7;
+  }
+
+  .span4:hover {
+    opacity:1;
+  }
+
+  .span4 img {
+    border:1px solid #000000;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+  }
+
+  .list_image {
+    width:  240px;
+    height: 280px;
+  }
+
+  .list_description {
+    width: 50%;
+  }
+
+  .list_actions {
+    font-size:    x-small;
+    text-align:   right;
+    padding-left: 1em;
+  }
+}
+/* END_HIGHLIGHT */
