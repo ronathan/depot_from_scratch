@@ -1,0 +1,22 @@
+<!-- content -->
+<div class="container">
+  <div class="hero-unit">
+    <i><h1>Your Pragmatic Catalog</h1></i>
+  </div>
+  
+  <div class="row">
+  	<% cache ['store', Product.latest] do %>
+    <% @products.each do |product| %>
+      <% cache ['span4', product] do %>
+      <div class ="span4">
+	    <center>
+		  <%= image_tag(product.image_url, class: 'list_image') %></br>
+		  <i><h4><%= product.title %>: <%= number_to_currency(product.price) %></h4></br></br></i>
+		</center>
+		<%= sanitize(product.description) %>
+	  </div>
+	<% end %>
+  </div>
+  <% end %>
+  <% end %>
+</div>

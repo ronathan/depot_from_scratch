@@ -32,7 +32,7 @@ Product.create(title: 'Programming Ruby 1.9 & 2.0',
 Product.create(title: 'Rails Test Prescriptions',
   description: 
     %{<p>
-        <em>Rails Test Prescriptions</em> is a comprehensive guide to testing
+        Rails Test Prescriptions is a comprehensive guide to testing
         Rails applications, covering Test-Driven Development from both a
         theoretical perspective (why to test) and from a practical perspective
         (how to test effectively). It covers the core Rails testing tools and
